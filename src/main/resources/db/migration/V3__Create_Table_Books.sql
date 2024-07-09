@@ -1,0 +1,7 @@
+﻿CREATE TABLE books (
+  id SERIAL PRIMARY KEY,
+  author TEXT NOT NULL,
+  launch_date TIMESTAMP NOT NULL,
+  price NUMERIC(65,2) NOT NULL,
+  title TEXT NOT NULL
+);
