@@ -112,7 +112,7 @@ public class PersonController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping(value = "/{id}")
+    @PatchMapping(value = "/disable/{id}")
     public ResponseEntity<Void> disable(@PathVariable Long id){
         personService.disablePerson(id);
         return ResponseEntity.noContent().build();
