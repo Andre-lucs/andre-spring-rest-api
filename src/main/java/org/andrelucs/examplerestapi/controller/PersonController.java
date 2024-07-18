@@ -30,7 +30,7 @@ public class PersonController {
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
     @Operation(summary = "Find all persons",description = "Finds all the persons",
-        tags = {"Books"},
+        tags = {"Persons"},
         responses = {
             @ApiResponse(responseCode = "200", description = "OK",
                 content = {
@@ -50,9 +50,9 @@ public class PersonController {
     ){
         var sorting = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
 
-        Pageable pegeable = PageRequest.of(page, size, Sort.by(sorting, "firstName"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sorting, "firstName"));
 
-        return (personService.findAll(pegeable));
+        return (personService.findAll(pageable));
     }
 
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
@@ -63,7 +63,7 @@ public class PersonController {
 
     @GetMapping(value = "/byName/{name}",produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
     @Operation(summary = "Find all persons containing {name}",description = "Finds all the persons by first name",
-            tags = {"Books"},
+            tags = {"Persons"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK",
                             content = {
@@ -94,6 +94,7 @@ public class PersonController {
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML}
     )
     public ResponseEntity<PersonDTO> insert(@RequestBody PersonDTO person){
+        System.out.println(person);
         return ResponseEntity.ok(personService.insert(person));
     }
 
