@@ -26,3 +26,5 @@ security:
     token:
       secret-key: 9dd194b1937a49a14027c6b465aadbffc48fcec7196d7d9cc465c83ce4ca42a78650c259b033f79063e199cf2a6619dac60e01a8f4c47aef0f2baf4124ad966e
       expire-length: 3600000
+server:
+  port: 80
