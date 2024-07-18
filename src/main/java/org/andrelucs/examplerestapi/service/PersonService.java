@@ -1,6 +1,7 @@
 package org.andrelucs.examplerestapi.service;
 
 import org.andrelucs.examplerestapi.controller.PersonController;
+import org.andrelucs.examplerestapi.exceptions.BadRequestException;
 import org.andrelucs.examplerestapi.exceptions.NotFoundException;
 import org.andrelucs.examplerestapi.model.Person;
 import org.andrelucs.examplerestapi.model.dto.PersonDTO;
@@ -22,11 +23,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 public class PersonService {
 
-    @Autowired
     private final PersonRepository personRepository;
-    @Autowired
     private final PersonMapper mapper;
-    @Autowired
     private final PagedResourcesAssembler<PersonDTO> pagedResourcesAssembler;
 
     public PersonService(PersonRepository personRepository, PersonMapper mapper, PagedResourcesAssembler<PersonDTO> pagedResourcesAssembler) {
@@ -42,19 +40,26 @@ public class PersonService {
     }
 
     public PersonDTO findById(Long id){
-        var person = mapper.personToPersonDTO(personRepository.findById(id).orElseThrow(()->new NotFoundException("Person not found")));
-        person.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
-        return person;
+        var person = personRepository.findById(id)
+                        .orElseThrow(()->new NotFoundException("Person not found"));
+        var personDto = mapper.personToPersonDTO(person);
+        personDto.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+        return personDto;
     }
 
     public PersonDTO insert(PersonDTO person){
         //data validation
+        if (person == null)
+            throw new BadRequestException("Passed Person or id is null");
+        System.out.println(person);
+        System.out.println(mapper.personDTOToPerson(person));
         var savedPerson = mapper.personToPersonDTO(personRepository.save(mapper.personDTOToPerson(person)));
         savedPerson.add(linkTo(methodOn(PersonController.class).findById(savedPerson.getKey())).withSelfRel());
         return savedPerson;
     }
 
     public PersonDTO update(PersonDTO personDTO){
+        if(personDTO == null || personDTO.getKey() == null) throw new BadRequestException("Passed person or person id is null");
         var oldPerson = personRepository.findById(personDTO.getKey());
         if(oldPerson.isEmpty()){
             throw new NotFoundException("Person not found");

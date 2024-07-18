@@ -24,6 +24,15 @@ public class PersonDTO extends RepresentationModel<PersonDTO> {
         setKey(id);
     }
 
+    public PersonDTO(Long id, String firstName, String lastName, String gender, String address, Boolean enabled) {
+        this.key = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.address = address;
+        this.enabled = enabled;
+    }
+
     public Long getKey() {
         return key;
     }
